@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: rgb(7, 172, 7);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        header nav{
+        text-align: center;
+        display: flex;
+        padding-bottom: 20px;
+}
+        header a{
+            text-align: center;
+        margin-top: 17px;
+        padding: 5px 12px;
+        text-decoration: none;
+        font-weight: bold;
+        color: white;
+        transition: all 500ms;
+        text-transform: uppercase;
+
+}
+nav a{
+    font-weight: 600;
+    padding-right:10px;
+}
+nav a:hover{
+    color: #ec9718;
+}
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .products {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+        }
+
+        .product h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .product p {
+            color: #666;
+        }
+
+        .product button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product button:hover {
+            background-color: #218838;
+        }
+
+        .cart {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .cart h3 {
+            margin: 0 0 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total {
+            font-weight: bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Carrito de Compras 🛒</h1>
+        <nav>
+   
+
+            <a href="http://127.0.0.1:5500/Proyecto_I/__pycache__/caja_registradora/inicio_caja.html">Inicio</a>
+            </nav>
+    </header>
+
+    <div class="container">
+        <div class="products">
+            <div class="product">
+                <img src="flor-de-loto.jpg" alt="flor de loto">
+                <h3>FLOR DE LOTO</h3>
+                <p>Simbolismo: La flor de loto es un símbolo de pureza, iluminación y renacimiento en muchas culturas.
+                    Características: Tiene grandes pétalos que se abren hacia el sol y crecen en aguas fangosas. Sus raíces están ancladas en el barro, pero la flor emerge hacia la luz, representando la superación de las dificultades.
+                    Variedad: Existen diferentes colores de flores de loto, como el blanco, el rosa, el amarillo y el azul.</p>
+                <p>Precio: $10</p>
+                <button onclick="addToCart('flor de loto', 10)">Agregar al Carrito</button>
+            </div>
+            <div class="product">
+                <img src="cactus.jpeg" alt="cactus">
+                <h3>CACTUS</h3>
+                <p>Adaptación: Los cactus son plantas suculentas que se han adaptado para sobrevivir en ambientes áridos y desérticos.
+                    Características: Tienen tallos gruesos y carnosos que almacenan agua, espinas para protegerse de los animales y raíces superficiales para absorber rápidamente la humedad.
+                    Variedad: Existen miles de especies de cactus, con formas y tamaños muy diversos.
+                    </p>
+                <p>Precio: $15</p>
+                <button onclick="addToCart('cactus', 15)">Agregar al Carrito</button>
+            </div>
+            <div class="product">
+                <img src="girasol.jpeg" alt="girasol">
+                <h3>GIRASOL</h3>
+                <p>Características: El girasol es una planta anual que se caracteriza por su gran flor de color amarillo brillante y su tallo alto y robusto.
+                    Orientación: Su nombre proviene de su capacidad para orientarse hacia el sol durante el día, un fenómeno conocido como heliotropismo.
+                    Semillas: Las semillas del girasol son comestibles y ricas en nutrientes.</p>
+                <p>Precio: $20</p>
+                <button onclick="addToCart('girasol', 20)">Agregar al Carrito</button>
+            </div>
+        </div>
+
+        <div class="cart">
+            <h3>🛒 Carrito</h3>
+            <div id="cart-items"></div>
+            <div class="total">Total: $<span id="total">0</span></div>
+        </div>
+    </div>
+
+    <script>
+        const cart = [];
+
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalContainer = document.getElementById('total');
+            cartItemsContainer.innerHTML = '';
+
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>$${item.price * item.quantity}</span>
+                    </div>
+                `;
+            });
+
+            totalContainer.textContent = total;
+        }
+    </script>
+</body>
+</html>
